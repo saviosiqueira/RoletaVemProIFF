@@ -20,7 +20,7 @@ public class Roletop : MonoBehaviour
     private void Start()
     {
 		roletaGirando = false;
-		anguloItem = 360/prize.Count;		
+		anguloItem = 360f/prize.Count;
 	}
 	
 	private void Update ()
@@ -28,17 +28,20 @@ public class Roletop : MonoBehaviour
 	    mouseDelta = Input.mousePosition - lastMousePosition;
 	    lastMousePosition = Input.mousePosition;
 
-        Debug.Log(mouseDelta.magnitude);
+        //Debug.Log(mouseDelta);
 	    
-        if (!Input.GetMouseButton(0)) return;
-        if (mouseDelta.magnitude <= 50 || roletaGirando) return;
+        if (!Input.GetMouseButton(0) || roletaGirando || mouseDelta.magnitude <= 30) return;
         
 	    randomTime = Random.Range(3, 4);
 	    Debug.Log((randomTime));
 	    numeroEscolhido = Random.Range(0, prize.Count);
 
         float maxAngle = 380 * randomTime + (numeroEscolhido * anguloItem);
-	        
+
+        if (roletaGirando) return;
+	    if (mouseDelta.x >= 0 && mouseDelta.y <= 0)
+	        maxAngle *= -1;
+	    
         StartCoroutine(GirarRoleta(2 * randomTime, maxAngle));
 	}
 	
